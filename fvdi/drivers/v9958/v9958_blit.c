@@ -22,7 +22,6 @@
 #include "fvdi.h"
 #include <stdint.h>
 #include "v99x8.h"
-#include "v9990.h"
 
 #define PIXEL		short
 #define PIXEL_SIZE	sizeof(PIXEL)

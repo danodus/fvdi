@@ -37,7 +37,8 @@ CSRC = \
 	xosera_line.c \
 	xosera_fill.c \
 	xosera_mouse.c \
-	xosera_blit.c
+	xosera_blit.c \
+	xosera_m68k_api.c
 
 # handle DevPac -> gas conversions
 # defines SSRC_GNU and SINCSRC_GNU variables

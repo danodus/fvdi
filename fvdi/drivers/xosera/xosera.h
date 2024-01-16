@@ -7,6 +7,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "xosera_m68k_api.h"
+
 short colours[];
 
 #endif

@@ -55,6 +55,7 @@ short shadow = 0;
 short fix_shape = 0;
 short no_restore = 0;
 
+extern Access *access;
 
 
 static Option const options[] = {
@@ -130,6 +131,9 @@ long check_token(char *token, const char **ptr)
  /* I have no idea what most of this does, just leave it as it is*/
 long CDECL initialize(Virtual *vwk)
 {
+
+    access->funcs.puts("Xosera: initialize()\r\n");
+
     Workstation *wk;
 	char *buf;
 	int old_palette_size;
@@ -142,8 +146,8 @@ long CDECL initialize(Virtual *vwk)
       
 
 	/* update the settings */
-	wk->screen.mfdb.width = 512;
-	wk->screen.mfdb.height = 208;
+	wk->screen.mfdb.width = 640;
+	wk->screen.mfdb.height = 480;
 	wk->screen.mfdb.bitplanes = 4;
 
 	
@@ -179,7 +183,6 @@ long CDECL initialize(Virtual *vwk)
 	device.byte_width = wk->screen.wrap;
 	device.address = wk->screen.mfdb.address;
 
-	
     return 1;
 }
 
@@ -209,8 +212,13 @@ long CDECL setup(long type, long value)
  * Create new (or use old) Workstation and default Virtual.
  * Supplied is the default fVDI virtual workstation.
  */
+void cpu_delay(int ms);
 Virtual *CDECL opnwk(Virtual *vwk)
 {
+
+    access->funcs.puts("Xosera opnwk()\r\n");
+
+
     Workstation *wk;
 
 	vwk = me->default_vwk;  /* This is what we're interested in */
@@ -218,8 +226,8 @@ Virtual *CDECL opnwk(Virtual *vwk)
 
 
 
-	wk->screen.mfdb.width = 512;
-	wk->screen.mfdb.height = 208;
+	wk->screen.mfdb.width = 640;
+	wk->screen.mfdb.height = 480;
 
 
 	wk->screen.mfdb.bitplanes = 4;
@@ -244,6 +252,19 @@ Virtual *CDECL opnwk(Virtual *vwk)
 		wk->screen.pixel.height = (wk->screen.pixel.height * 1000L) / wk->screen.mfdb.height;
 	else									/*	 or fixed DPI (negative) */
 		wk->screen.pixel.height = 25400 / -wk->screen.pixel.height;
+
+
+    access->funcs.puts("Xosera: initializing...\r\n");
+    if (!xosera_init(0)) {
+        access->funcs.puts("Xosera: initialization failed.\r\n");
+        return 0;
+    }
+    access->funcs.puts("Xosera: configuring...\r\n");
+    xreg_setw(PA_LINE_LEN, 640 / 4);
+    xreg_setw(VID_RIGHT, 640);
+    xreg_setw(PA_GFX_CTRL, 0x0050); /* bitmap 4-bpp */    
+    xreg_setw(PB_GFX_CTRL, 0x0080); /* blank PB */
+    access->funcs.puts("Xosera: done.\r\n");
 
     return 0;
 }

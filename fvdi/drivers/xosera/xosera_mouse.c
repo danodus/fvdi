@@ -46,5 +46,5 @@ extern Access *access;
 long CDECL
 c_mouse_draw(Workstation *wk, long x, long y, Mouse *mouse)
 {
-	return 0;
+	return 1;
 }

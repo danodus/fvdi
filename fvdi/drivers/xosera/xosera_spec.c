@@ -254,6 +254,7 @@ Virtual *CDECL opnwk(Virtual *vwk)
 		wk->screen.pixel.height = 25400 / -wk->screen.pixel.height;
 
 
+    xv_prep();
     access->funcs.puts("Xosera: initializing...\r\n");
     if (!xosera_init(0)) {
         access->funcs.puts("Xosera: initialization failed.\r\n");

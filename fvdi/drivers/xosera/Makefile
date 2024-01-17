@@ -8,6 +8,16 @@
 # gcc >= 2.95.3 (sparemint) version
 #
 
+ifndef ROSCO_M68K_DIR
+$(info Please set ROSCO_M68K_DIR to the rosco_m68k root directory to use for rosco_m68k building)
+endif
+# check for xosera_m68k_api build dir
+ifndef XOSERA_M68K_API
+$(info Please set XOSERA_M68K_API to the xosera_m68k_api directory to use for Xosera m68k building)
+endif
+
+#-include $(ROSCO_M68K_DIR)/user.mk
+
 TARGET = xosera.sys
 
 all: $(TARGET)
@@ -17,7 +27,10 @@ top_srcdir = ../..
 OPTS    = -mshort -O2 -fomit-frame-pointer
 include $(top_srcdir)/CONFIGVARS
 
-CFLAGS  = $(CPUOPTS) $(OPTS) $(WARNINGS) -I$(top_srcdir)/include -I$(top_srcdir)/drivers/include
+CFLAGS  = $(CPUOPTS) $(OPTS) $(WARNINGS) -I$(top_srcdir)/include -I$(top_srcdir)/drivers/include -I$(ROSCO_M68K_DIR)/code/software/libs/build/include -I$(XOSERA_M68K_API)
+# HACK: suppress warnings from rosco_m68k headers when these not defined
+CFLAGS  += -D_XOPEN_SOURCE=700 -D_FORTIFY_SOURCE=0
+
 
 SINCSRC = \
 	$(top_srcdir)/drivers/bitplane/1_expand.inc

@@ -35,7 +35,14 @@ c_write_pixel(Virtual *vwk, MFDB *dst, long x, long y, long colour)
 	if ((long)vwk & 1)
 		return 0;
 
-	// TODO
+	wk = vwk->real_address;
+	if (!dst || !dst->address || (dst->address == wk->screen.mfdb.address)) {
+		//put pixel on the screen
+		xosera_pset(x, y, colour);
+	} else {
+		//supposed to put pixel in a buffer, but Im putting it in VRAM offscreen for performance;
+		xosera_pset(x, y + 240, colour);
+	}
 
 	return 1;
 }
@@ -47,7 +54,12 @@ c_read_pixel(Virtual *vwk, MFDB *src, long x, long y)
 	Workstation *wk;
 	long offset;
 	unsigned long colour;
-	// TODO
-	colour = 0;
+	wk = vwk->real_address;
+	if (!src || !src->address || (src->address == wk->screen.mfdb.address)) {
+		colour = xosera_point(x, y);
+	} else {
+		colour = xosera_point(x, y + 240);
+	}
+
 	return colour;
 }

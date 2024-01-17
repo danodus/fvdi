@@ -147,7 +147,7 @@ long CDECL initialize(Virtual *vwk)
 
 	/* update the settings */
 	wk->screen.mfdb.width = 640;
-	wk->screen.mfdb.height = 480;
+	wk->screen.mfdb.height = 240;
 	wk->screen.mfdb.bitplanes = 4;
 
 	
@@ -227,7 +227,7 @@ Virtual *CDECL opnwk(Virtual *vwk)
 
 
 	wk->screen.mfdb.width = 640;
-	wk->screen.mfdb.height = 480;
+	wk->screen.mfdb.height = 240;
 
 
 	wk->screen.mfdb.bitplanes = 4;
@@ -262,7 +262,7 @@ Virtual *CDECL opnwk(Virtual *vwk)
     access->funcs.puts("Xosera: configuring...\r\n");
     xreg_setw(PA_LINE_LEN, 640 / 4);
     xreg_setw(VID_RIGHT, 640);
-    xreg_setw(PA_GFX_CTRL, 0x0050); /* bitmap 4-bpp */    
+    xreg_setw(PA_GFX_CTRL, 0x0051); /* bitmap 4-bpp */    
     xreg_setw(PB_GFX_CTRL, 0x0080); /* blank PB */
     access->funcs.puts("Xosera: done.\r\n");
 

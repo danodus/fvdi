@@ -64,3 +64,29 @@ short colours[] = {
    0, 267, 133,     0, 267,  67,     0, 267,   0,    67, 267,   0,  
  133, 267,   0,   200, 267,   0,   267, 267,   0,   267, 200,   0,  
  267, 133,   0,   267,  67,   0,  1000,1000,1000,     0,   0,   0};
+
+void xosera_pset(uint16_t dx, uint16_t dy, uint8_t color)
+{
+    if (dx < 640 && dy < 240)
+    {
+        uint8_t  uc = color << 4 | color;
+        uint16_t addr = dy * (640 / 4) + (dx / 4);
+        xm_setw(WR_ADDR, addr);
+        xm_setbl(SYS_CTRL, 0x8 >> (dx & 0x3));
+        xm_setbh(DATA, uc);
+        xm_setbl(DATA, uc);
+        xm_setbl(SYS_CTRL, 0x0F);
+    }
+}
+
+uint8_t xosera_point(uint16_t sx, uint16_t sy)
+{
+    uint16_t color;
+    if (sx < 640 && sy < 240)
+    {
+        uint16_t addr = sy * (640 / 4) + (sx / 4);
+        xm_setw(WR_ADDR, addr);
+        color = xm_getw(DATA);
+    }
+    return color >> ((3 - (sx & 0x3)) * 4);
+}

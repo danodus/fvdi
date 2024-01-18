@@ -67,6 +67,7 @@ short colours[] = {
 
 void xosera_pset(uint16_t dx, uint16_t dy, uint8_t color)
 {
+    xv_prep();
     if (dx < 640 && dy < 240)
     {
         uint8_t  uc = color << 4 | color;
@@ -81,6 +82,7 @@ void xosera_pset(uint16_t dx, uint16_t dy, uint8_t color)
 
 uint8_t xosera_point(uint16_t sx, uint16_t sy)
 {
+    xv_prep();  
     uint16_t color;
     if (sx < 640 && sy < 240)
     {

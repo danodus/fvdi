@@ -28,9 +28,8 @@ OPTS    = -mshort -O2 -fomit-frame-pointer
 include $(top_srcdir)/CONFIGVARS
 
 CFLAGS  = $(CPUOPTS) $(OPTS) $(WARNINGS) -I$(top_srcdir)/include -I$(top_srcdir)/drivers/include -I$(ROSCO_M68K_DIR)/code/software/libs/build/include -I$(XOSERA_M68K_API)
-# HACK: suppress warnings from rosco_m68k headers when these not defined
-CFLAGS  += -D_XOPEN_SOURCE=700 -D_FORTIFY_SOURCE=0
-
+# don't include rosco firmware I/O in API, also define a few things that rosco_m68k toolchain normally defines to quiet warnings
+CFLAGS +=  -DXOSERA_API_MINIMAL -D_XOPEN_SOURCE=700 -D_FORTIFY_SOURCE=0
 
 SINCSRC = \
 	$(top_srcdir)/drivers/bitplane/1_expand.inc
@@ -51,7 +50,7 @@ CSRC = \
 	xosera_fill.c \
 	xosera_mouse.c \
 	xosera_blit.c \
-	xosera_m68k_api.c
+	$(XOSERA_M68K_API)/xosera_m68k_api.c
 
 # handle DevPac -> gas conversions
 # defines SSRC_GNU and SINCSRC_GNU variables

@@ -28,7 +28,6 @@
 #define PIXEL		unsigned char
 
 
-static long tos_colours[] = {0, 255, 1, 2, 4, 6, 3, 5, 7, 8, 9, 10, 12, 14, 11, 13};
 extern Access *access;
 
 
@@ -50,11 +49,11 @@ void CDECL c_set_colour(Virtual *vwk, long paletteIndex, long red, long green, l
 		//but after setting it up, it reset all the colors to 0 for some reason, so i made it impossible for it to change a color after it has been set once
 		return;
 	}
-	uint8_t redBlue = blue&0x7;
-	redBlue += (red&0x7)<<4;
-	uint8_t greenR = green&0x7;
-	uint16_t coldat = redBlue + (greenR<<8); 
-	// TODO: write register
+	uint16_t r = red & 0xF;
+	uint16_t g = green & 0xF;
+	uint16_t b = blue & 0xF;
+	uint16_t c = (r << 8) | (g << 4) | b;
+	xosera_palette_register_write(shortInd, c);
 	indices[shortInd]=1;
    
 }
@@ -62,6 +61,8 @@ void CDECL c_set_colour(Virtual *vwk, long paletteIndex, long red, long green, l
 void CDECL
 c_set_colours(Virtual *vwk, long start, long entries, unsigned short *requested, Colour palette[])
 {
+	access->funcs.puts("Xosera: c_set_colours()\r\n");
+
 	unsigned long colour;
 	unsigned short component;
 	unsigned long tc_word;

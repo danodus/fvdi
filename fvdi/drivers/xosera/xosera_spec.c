@@ -169,6 +169,19 @@ long CDECL initialize(Virtual *vwk)
 	else                                    /*   or fixed DPI (negative) */
 		wk->screen.pixel.height = 25400 / -wk->screen.pixel.height;
 
+    xv_prep();
+    access->funcs.puts("Xosera: initializing...\r\n");
+    if (!xosera_init(0)) {
+        access->funcs.puts("Xosera: initialization failed.\r\n");
+        return 0;
+    }
+    access->funcs.puts("Xosera: configuring...\r\n");
+    xreg_setw(PA_LINE_LEN, 640 / 4);
+    xreg_setw(VID_RIGHT, 640);
+    xreg_setw(PA_GFX_CTRL, 0x0051); /* bitmap 4-bpp */    
+    xreg_setw(PB_GFX_CTRL, 0x0080); /* blank PB */
+    access->funcs.puts("Xosera: done.\r\n");
+
 	/*	
 	 * This code needs more work.
 	 * Especially if there was no VDI started since before.
@@ -212,7 +225,6 @@ long CDECL setup(long type, long value)
  * Create new (or use old) Workstation and default Virtual.
  * Supplied is the default fVDI virtual workstation.
  */
-void cpu_delay(int ms);
 Virtual *CDECL opnwk(Virtual *vwk)
 {
 
@@ -252,20 +264,6 @@ Virtual *CDECL opnwk(Virtual *vwk)
 		wk->screen.pixel.height = (wk->screen.pixel.height * 1000L) / wk->screen.mfdb.height;
 	else									/*	 or fixed DPI (negative) */
 		wk->screen.pixel.height = 25400 / -wk->screen.pixel.height;
-
-
-    xv_prep();
-    access->funcs.puts("Xosera: initializing...\r\n");
-    if (!xosera_init(0)) {
-        access->funcs.puts("Xosera: initialization failed.\r\n");
-        return 0;
-    }
-    access->funcs.puts("Xosera: configuring...\r\n");
-    xreg_setw(PA_LINE_LEN, 640 / 4);
-    xreg_setw(VID_RIGHT, 640);
-    xreg_setw(PA_GFX_CTRL, 0x0051); /* bitmap 4-bpp */    
-    xreg_setw(PB_GFX_CTRL, 0x0080); /* blank PB */
-    access->funcs.puts("Xosera: done.\r\n");
 
     return 0;
 }

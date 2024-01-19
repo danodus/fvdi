@@ -12,6 +12,7 @@
 
 short colours[];
 
+void xosera_palette_register_write(uint8_t palette, uint16_t data);
 void xosera_pset(uint16_t dx, uint16_t dy, uint8_t color);
 uint8_t xosera_point(uint16_t sx, uint16_t sy);
 

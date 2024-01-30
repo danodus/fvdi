@@ -94,7 +94,7 @@ uint8_t xosera_point(uint16_t sx, uint16_t sy)
     if (sx >= 0 && sy >= 0 && sx < 640 && sy < 240)
     {
         uint16_t addr = sy * (640 / 4) + (sx / 4);
-        xm_setw(WR_ADDR, addr);
+        xm_setw(RD_ADDR, addr);
         color = xm_getw(DATA);
     }
     return color >> ((3 - (sx & 0x3)) * 4);

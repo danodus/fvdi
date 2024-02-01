@@ -29,9 +29,7 @@ long CDECL
 c_write_pixel(Virtual *vwk, MFDB *dst, long x, long y, long colour)
 {
 	Workstation *wk;
-	long offset;
-        uint16_t col;
-	
+
 	if ((long)vwk & 1)
 		return 0;
 
@@ -52,7 +50,6 @@ long CDECL
 c_read_pixel(Virtual *vwk, MFDB *src, long x, long y)
 {
 	Workstation *wk;
-	long offset;
 	unsigned long colour;
 	wk = vwk->real_address;
 	if (!src || !src->address || (src->address == wk->screen.mfdb.address)) {

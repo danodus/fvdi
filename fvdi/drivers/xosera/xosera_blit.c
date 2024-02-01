@@ -1,4 +1,4 @@
-/* 
+/*
  * A 16 bit graphics blit routine, by Johan Klockars.
  *
  * This file is an example of how to write an
@@ -11,28 +11,16 @@
  * of license.
  */
 
-#if 1
-#define FAST		/* Write in FastRAM buffer */
-#define BOTH		/* Write in both FastRAM and on screen */
-#else
-#undef FAST
-#undef BOTH
-#endif
-
 #include "fvdi.h"
 #include <stdint.h>
 #include "xosera.h"
 
-#define PIXEL		short
-#define PIXEL_SIZE	sizeof(PIXEL)
-
-
 long CDECL
-c_blit_area(Virtual *vwk, MFDB *src, long src_x, long src_y,
-            MFDB *dst, long dst_x, long dst_y,
-            long w, long h, long operation)
+c_blit_area(Virtual *UNUSED(vwk), MFDB *UNUSED(src), long UNUSED(src_x), long UNUSED(src_y),
+            MFDB *UNUSED(dst), long UNUSED(dst_x), long UNUSED(dst_y),
+            long UNUSED(w), long UNUSED(h), long UNUSED(operation))
 {
     // TODO
-	return 0;
+    return 0;
 }
 

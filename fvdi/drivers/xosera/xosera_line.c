@@ -1,4 +1,4 @@
-/* 
+/*
  * A 16 bit graphics line routine, by Johan Klockars.
  *
  * This file is an example of how to write an
@@ -11,17 +11,10 @@
  * of license.
  */
 
-
-#include "fvdi.h"
 #include "xosera.h"
 
-extern void CDECL c_get_colours(Virtual *vwk, long colour, short *foreground, short *background);
-
-extern long CDECL clip_line(Virtual *vwk, long *x1, long *y1, long *x2, long *y2);
-
-
-long CDECL c_line_draw(Virtual *vwk, long x1, long y1, long x2, long y2,
-                       long pattern, long colour, long mode)
+long CDECL c_line_draw(Virtual *UNUSED(vwk), long UNUSED(x1), long UNUSED(y1), long UNUSED(x2), long UNUSED(y2),
+                       long UNUSED(pattern), long UNUSED(colour), long UNUSED(mode))
 {
-	return 0;
+    return 0;
 }

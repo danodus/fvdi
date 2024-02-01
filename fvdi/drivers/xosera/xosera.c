@@ -75,7 +75,7 @@ void xosera_palette_register_write(uint8_t palette, uint16_t data)
 void xosera_pset(uint16_t dx, uint16_t dy, uint8_t color)
 {
     xv_prep();
-    if (dx >= 0 && dy >= 0 && dx < 640 && dy < 240)
+    if (dx < 640 && dy < 240)
     {
         uint8_t uc = color << 4 | color;
         uint16_t addr = dy * (640 / 4) + (dx / 4);
@@ -91,7 +91,7 @@ uint8_t xosera_point(uint16_t sx, uint16_t sy)
 {
     xv_prep();  
     uint16_t color = 0;
-    if (sx >= 0 && sy >= 0 && sx < 640 && sy < 240)
+    if (sx < 640 && sy < 240)
     {
         uint16_t addr = sy * (640 / 4) + (sx / 4);
         xm_setw(RD_ADDR, addr);

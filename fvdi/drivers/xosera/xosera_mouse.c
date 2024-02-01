@@ -21,30 +21,19 @@
 
 /*#define ENABLE_KDEBUG*/
 
-#include "fvdi.h"
 #include <stdint.h>
 #include "xosera.h"
 #include "relocate.h"
-
-
 
 uint8_t m_temp[128];
 
 /* External data and functions */
 extern Driver *me;
-extern long CDECL c_xpand_area(Virtual *vwk, MFDB *src, long src_x, long src_y, MFDB *dst, long dst_x, long dst_y, long w, long h, long operation, long colour);
-extern long CDECL c_blit_area(Virtual *vwk, MFDB *src, long src_x, long src_y, MFDB *dst, long dst_x, long dst_y, long w, long h, long operation);
-
-
 
 extern Access *access;
 
-
-
-
-
 long CDECL
-c_mouse_draw(Workstation *wk, long x, long y, Mouse *mouse)
+c_mouse_draw(Workstation *UNUSED(wk), long UNUSED(x), long UNUSED(y), Mouse *UNUSED(mouse))
 {
-	return 1;
+    return 1;
 }

@@ -131,26 +131,18 @@ long check_token(char *token, const char **ptr)
  /* I have no idea what most of this does, just leave it as it is*/
 long CDECL initialize(Virtual *vwk)
 {
-
     access->funcs.puts("Xosera: initialize()\r\n");
 
     Workstation *wk;
-	char *buf;
-	int old_palette_size;
-	Colour *old_palette_colours;
-	int fast_w_bytes;
-	
+
 	vwk = me->default_vwk;	/* This is what we're interested in */	
 	wk = vwk->real_address;
-
-      
 
 	/* update the settings */
 	wk->screen.mfdb.width = 640;
 	wk->screen.mfdb.height = 240;
 	wk->screen.mfdb.bitplanes = 4;
 
-	
 	wk->screen.mfdb.wdwidth = (wk->screen.mfdb.width + 15) / 16;
 	wk->screen.wrap = wk->screen.mfdb.width * (wk->screen.mfdb.bitplanes / 8);
 

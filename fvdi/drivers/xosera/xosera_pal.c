@@ -14,11 +14,8 @@
  */
 
 #include "xosera.h"
-//#include "fvdi.h"
 #include "relocate.h"
 #include <stdint.h>
-
-#define NOVA 0		/* 1 - byte swap 16 bit colour value (NOVA etc) */
 
 #define red_bits   5	/* 5 for all normal 16 bit hardware */
 #define green_bits 5	/* 6 for Falcon TC and NOVA 16 bit, 5 for NOVA 15 bit */
@@ -27,21 +24,17 @@
 
 #define PIXEL		unsigned char
 
-
 extern Access *access;
 
-
 long CDECL
-c_get_colour(Virtual *vwk, long colour)
+c_get_colour(Virtual *UNUSED(vwk), long colour)
 {
 	// There was much more code here before, no idea what it did, it works like this so it is alright I hope
 	return colour&0xf;
-
 }
 
-
 uint8_t indices[16];
-void CDECL c_set_colour(Virtual *vwk, long paletteIndex, long red, long green, long blue)
+static void c_set_colour(Virtual *UNUSED(vwk), long paletteIndex, long red, long green, long blue)
 {
 	//this code sets up a pallete index with the specified value
 	uint8_t shortInd = (uint8_t) paletteIndex&0xf;
@@ -88,17 +81,6 @@ c_set_colours(Virtual *vwk, long start, long entries, unsigned short *requested,
 			palette[start + i].hw.blue = component;	/* Not at all correct */
 			colour = component >> (16 - blue_bits);		/* (component + (1 << (14 - blue_bits))) */
 			tc_word |= colour;
-#if NOVA
-			switch (sizeof(PIXEL)) {
-			case 2:
-				tc_word = ((tc_word & 0x000000ffL) << 8) | ((tc_word & 0x0000ff00L) >>  8);
-				break;
-			default:
-				tc_word = ((tc_word & 0x000000ffL) << 24) | ((tc_word & 0x0000ff00L) <<  8) |
-				          ((tc_word & 0x00ff0000L) >>  8) | ((tc_word & 0xff000000L) >> 24);
-				break;
-			}
-#endif
 			c_set_colour(	vwk,
 					start + i,
 					palette[start + i].vdi.red,
@@ -137,17 +119,6 @@ c_set_colours(Virtual *vwk, long start, long entries, unsigned short *requested,
 			palette[start + i].hw.blue = (colour + (1L << (blue_bits - 1))) / ((1L << blue_bits) - 0);
 			palette[start + i].hw.blue = colour;
 			tc_word |= colour;
-#if NOVA
-			switch (sizeof(PIXEL)) {
-			case 2:
-				tc_word = ((tc_word & 0x000000ffL) << 8) | ((tc_word & 0x0000ff00L) >>  8);
-				break;
-			default:
-				tc_word = ((tc_word & 0x000000ffL) << 24) | ((tc_word & 0x0000ff00L) <<  8) |
-				          ((tc_word & 0x00ff0000L) >>  8) | ((tc_word & 0xff000000L) >> 24);
-				break;
-			}
-#endif
 			c_set_colour(	vwk,
 					start + i,
 					palette[start + i].hw.red,

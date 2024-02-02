@@ -7,11 +7,14 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <fvdi.h>
+#include "fvdi.h"
 
 #include "xosera_m68k_api.h"
 
 extern short colours[];
+
+// A lookup table to take a color in 4 bits and expand it to sixteen, e.g A => 0xAAAA
+extern uint16_t expanded_color[];
 
 void xosera_palette_register_write(uint8_t palette, uint16_t data);
 void xosera_pset(uint16_t dx, uint16_t dy, uint8_t color);
@@ -31,6 +34,7 @@ long CDECL c_blit_area(Virtual *vwk, MFDB *src, long src_x, long src_y, MFDB *ds
 //long CDECL (*text_area_r)(Virtual *vwk, short *text, long length, long dst_x, long dst_y, short *offsets);
 long CDECL c_mouse_draw(Workstation *wk, long x, long y, Mouse *mouse);
 
+#define IS_SCREEN(WK, MFDB) ((!(MFDB)) || !((MFDB)->address) || (((MFDB)->address) == ((WK)->screen.mfdb.address)))
 
 #ifdef __GNUC__
 #  define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))

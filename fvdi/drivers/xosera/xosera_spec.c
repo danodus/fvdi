@@ -172,6 +172,10 @@ long CDECL initialize(Virtual *vwk)
     xreg_setw(VID_RIGHT, 640);
     xreg_setw(PA_GFX_CTRL, 0x0051); /* bitmap 4-bpp */    
     xreg_setw(PB_GFX_CTRL, 0x0080); /* blank PB */
+    xm_setw(PIXEL_X, 0); /* VRAM base is 0x0. */
+    xm_setw(PIXEL_Y, 640/4); /* Number of words per line. */
+    xm_setbh(SYS_CTRL, 0); /* Set pixel parameters. */
+
     access->funcs.puts("Xosera: done.\r\n");
 
 	/*	

@@ -72,30 +72,8 @@ void xosera_palette_register_write(uint8_t palette, uint16_t data)
     xm_setw(XDATA, data);
 }
 
-void xosera_pset(uint16_t dx, uint16_t dy, uint8_t color)
-{
-    xv_prep();
-    if (dx < 640 && dy < 240)
-    {
-        uint8_t uc = color << 4 | color;
-        uint16_t addr = dy * (640 / 4) + (dx / 4);
-        xm_setw(WR_ADDR, addr);
-        xm_setbl(SYS_CTRL, 0x8 >> (dx & 0x3));
-        xm_setbh(DATA, uc);
-        xm_setbl(DATA, uc);
-        xm_setbl(SYS_CTRL, 0x0F);
-    }
-}
-
-uint8_t xosera_point(uint16_t sx, uint16_t sy)
-{
-    xv_prep();  
-    uint16_t color = 0;
-    if (sx < 640 && sy < 240)
-    {
-        uint16_t addr = sy * (640 / 4) + (sx / 4);
-        xm_setw(RD_ADDR, addr);
-        color = xm_getw(DATA);
-    }
-    return color >> ((3 - (sx & 0x3)) * 4);
-}
+// A lookup table to take a color in 4 bits and expand it to sixteen, e.g A => 0xAAAA
+uint16_t expanded_color[16] = {
+        0x0000, 0x1111, 0x2222, 0x3333, 0x4444, 0x5555, 0x6666, 0x7777,
+        0x8888, 0x9999, 0xAAAA, 0xBBBB, 0xCCCC, 0xDDDD, 0xEEEE, 0xFFFF
+};

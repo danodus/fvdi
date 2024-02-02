@@ -172,6 +172,7 @@ long CDECL initialize(Virtual *vwk)
     xreg_setw(VID_RIGHT, 640);
     xreg_setw(PA_GFX_CTRL, 0x0051); /* bitmap 4-bpp */    
     xreg_setw(PB_GFX_CTRL, 0x0080); /* blank PB */
+    xm_setw(WR_INCR, 1);
     xm_setw(PIXEL_X, 0); /* VRAM base is 0x0. */
     xm_setw(PIXEL_Y, 640/4); /* Number of words per line. */
     xm_setbh(SYS_CTRL, 0); /* Set pixel parameters. */
@@ -187,9 +188,9 @@ long CDECL initialize(Virtual *vwk)
 		access->funcs.copymem(loaded_palette, colours, 16 * 3 * sizeof(short));
 	wk->screen.palette.size = 16;
 	
-	c_initialize_palette(vwk, 0, wk->screen.palette.size, colours, wk->screen.palette.colours);
+    c_initialize_palette(vwk, 0, wk->screen.palette.size, colours, wk->screen.palette.colours);
 
-	device.byte_width = wk->screen.wrap;
+    device.byte_width = wk->screen.wrap;
 	device.address = wk->screen.mfdb.address;
 
     return 1;

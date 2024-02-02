@@ -62,7 +62,7 @@ c_set_colours(Virtual *vwk, long start, long entries, unsigned short *requested,
 	int i;
 	// I have no idea what all of this does, i just copied it from another driver, crashes without it
 	if ((long)requested & 1) {			/* New entries? */
-		requested = (short *)((long)requested & 0xfffffffeL);
+		requested = (unsigned short *)((long)requested & 0xfffffffeL);
 		for(i = 0; i < entries; i++) {
 			requested++;				/* First word is reserved */
 			component = *requested++;

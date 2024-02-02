@@ -38,10 +38,10 @@ c_read_pixel(Virtual *vwk, MFDB *src, long x, long y)
     // If off screen, offset the Y by 240.
     uint16_t offset = IS_SCREEN(vwk->real_address, src) ? 0 : 240;
     xv_prep();
-    xm_setw(PIXEL_X, x);
-    xm_setw(PIXEL_Y, y + offset);
-    // Xosera will return the 4 pixel word from X & 3.
-    uint16_t word = xm_getw(DATA);
-    uint16_t shift = (3 - (x & 3)) << 2;
-    return (word >> shift) & 0xF;
+
+    uint16_t color;
+    uint16_t addr = (y + offset) * (640 / 4) + (x / 4);
+    xm_setw(RD_ADDR, addr);
+    color = xm_getw(DATA);
+    return color >> ((3 - (x & 0x3)) * 4);
 }

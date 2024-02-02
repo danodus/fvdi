@@ -15,6 +15,17 @@
 
 #include "xosera.h"
 
+uint16_t common_fills[] = {
+        0xFFFF, 0xF,
+        0xAAAA, 0xA,
+        0x5555, 0x5,
+        0xCCCC, 0xC,
+        0x3333, 0x3,
+        0x6666, 0x6,
+        0x9999, 0x9,
+        0x0000, 0x0, /* end sentinal, not a valid mask */
+};
+
 static void xosera_simple_fill_no_blitter(long x0, long y0, long w, long h, uint16_t exp_color, short *pattern)
 {
     xv_prep();
@@ -26,12 +37,20 @@ static void xosera_simple_fill_no_blitter(long x0, long y0, long w, long h, uint
         xm_setw(PIXEL_Y, line);
         uint16_t pattern_word = pattern[pattern_index++];
         if (pattern_index == 16) pattern_index = 0;
-        if (pattern_word == 0xFFFF) { /* Handle common fill case. */
-            xm_setbl(SYS_CTRL, 0xF);
+        uint16_t wr_mask = 0, fast = 0;
+        for (uint16_t *p = common_fills; *p; p += 2) {
+            if (pattern_word == *p) {
+                wr_mask = *++p;
+                fast = 1;
+                break;
+            }
+        }
+        if (fast) { /* Handle common fill cases. */
+            xm_setbl(SYS_CTRL, wr_mask);
             for (long word = 0; word < width_in_words; word++) {
                 xm_setw(DATA, exp_color);
             }
-        } else { /* Slower pattern case. */
+        } else { /* Slower general case. */
             for (long word = 0; word < width_in_words; word++) {
                 /* Determine the mask for this word worth of four pixels */
                 uint16_t pattern_shift = (3 - (word & 3)) << 2;

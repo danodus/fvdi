@@ -11,15 +11,7 @@
  * of license.
  */
 
-#define BOTH	/* Write in both FastRAM and on screen */
-
-#include "fvdi.h"
-#include "relocate.h"
 #include "xosera.h"
-#include <stdint.h>
-#include "utility.h"
-
-extern Access *access;
 
 /* destination MFDB (odd address marks table operation)
  * x or table address
@@ -28,38 +20,28 @@ extern Access *access;
 long CDECL
 c_write_pixel(Virtual *vwk, MFDB *dst, long x, long y, long colour)
 {
-	Workstation *wk;
-	long offset;
-        uint16_t col;
-	
 	if ((long)vwk & 1)
 		return 0;
 
-	wk = vwk->real_address;
-	if (!dst || !dst->address || (dst->address == wk->screen.mfdb.address)) {
-		//put pixel on the screen
-		xosera_pset(x, y, colour);
-	} else {
-		//supposed to put pixel in a buffer, but Im putting it in VRAM offscreen for performance;
-		xosera_pset(x, y + 240, colour);
-	}
-
+    // If off screen, offset the Y by 240.
+    uint16_t offset = IS_SCREEN(vwk->real_address, dst) ? 0 : 240;
+    xv_prep();
+    xm_setw(PIXEL_X, x);
+    xm_setw(PIXEL_Y, y + offset);
+    xm_setw(DATA, expanded_color[colour & 0xF]);
 	return 1;
 }
-
 
 long CDECL
 c_read_pixel(Virtual *vwk, MFDB *src, long x, long y)
 {
-	Workstation *wk;
-	long offset;
-	unsigned long colour;
-	wk = vwk->real_address;
-	if (!src || !src->address || (src->address == wk->screen.mfdb.address)) {
-		colour = xosera_point(x, y);
-	} else {
-		colour = xosera_point(x, y + 240);
-	}
-
-	return colour;
+    // If off screen, offset the Y by 240.
+    uint16_t offset = IS_SCREEN(vwk->real_address, src) ? 0 : 240;
+    xv_prep();
+    xm_setw(PIXEL_X, x);
+    xm_setw(PIXEL_Y, y + offset);
+    // Xosera will return the 4 pixel word from X & 3.
+    uint16_t word = xm_getw(DATA);
+    uint16_t shift = (3 - (x & 3)) << 2;
+    return (word >> shift) & 0xF;
 }

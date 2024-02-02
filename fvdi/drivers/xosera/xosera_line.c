@@ -17,6 +17,8 @@
 long CDECL c_line_draw(Virtual *vwk, long x1, long y1, long x2, long y2,
                        long pattern, long colour, long UNUSED(mode))
 {
+    return 0;
+    
     if ((long)vwk & 1) {
         return -1;                      /* Don't know about anything yet */
     }

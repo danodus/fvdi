@@ -67,6 +67,7 @@ long CDECL c_fill_area(Virtual *UNUSED(vwk), long x0, long y0, long w, long h,
 {
     // If the width AND starting x0 are both an even multiple of four pixels (one word), we can handle that.
     // Otherwise, tell fVDI to use its fallback.
+    /*
     int width_ok = (w  & 3) == 0;
     int x0_ok    = (x0 & 3) == 0;
 
@@ -74,5 +75,6 @@ long CDECL c_fill_area(Virtual *UNUSED(vwk), long x0, long y0, long w, long h,
         xosera_simple_fill_no_blitter(x0, y0, w, h, expanded_color[colour], pattern);
         return 1;
     }
+    */
     return 0;
 }

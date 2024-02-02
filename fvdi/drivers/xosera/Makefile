@@ -37,6 +37,7 @@ SSRC = \
 	../common/clip.s
 
 CSRC = \
+    ../common/colours.c \
 	xosera.c \
 	init.c \
 	printf.c \

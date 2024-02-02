@@ -11,8 +11,6 @@
 
 #include "xosera_m68k_api.h"
 
-extern short colours[];
-
 // A lookup table to take a color in 4 bits and expand it to sixteen, e.g A => 0xAAAA
 extern uint16_t expanded_color[];
 

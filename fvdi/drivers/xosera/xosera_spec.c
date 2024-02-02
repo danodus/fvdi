@@ -19,7 +19,7 @@
 #include "xosera.h"
 
 
-
+extern short default_vdi_colors[256][3];
 
 char red[] = {5};
 char green[] = {5};
@@ -185,10 +185,10 @@ long CDECL initialize(Virtual *vwk)
 	 */
 
 	if (loaded_palette)
-		access->funcs.copymem(loaded_palette, colours, 16 * 3 * sizeof(short));
+		access->funcs.copymem(loaded_palette, default_vdi_colors, 16 * 3 * sizeof(short));
 	wk->screen.palette.size = 16;
 	
-    c_initialize_palette(vwk, 0, wk->screen.palette.size, colours, wk->screen.palette.colours);
+    c_initialize_palette(vwk, 0, wk->screen.palette.size, default_vdi_colors, wk->screen.palette.colours);
 
     device.byte_width = wk->screen.wrap;
 	device.address = wk->screen.mfdb.address;

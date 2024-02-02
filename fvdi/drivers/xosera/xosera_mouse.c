@@ -32,8 +32,56 @@ extern Driver *me;
 
 extern Access *access;
 
-long CDECL
-c_mouse_draw(Workstation *UNUSED(wk), long UNUSED(x), long UNUSED(y), Mouse *UNUSED(mouse))
+static void hide_mouse()
 {
-    return 1;
+	xv_prep();
+	xreg_setw(POINTER_H, 0x0000);
+	xreg_setw(POINTER_V, 0x0000);
+}
+
+static void show_mouse(short x, short y)
+{
+	xv_prep();
+	xreg_setw(POINTER_H, x + 154);
+	xreg_setw(POINTER_V, 0xF000 | (y * 2));
+}
+
+long CDECL
+c_mouse_draw(Workstation *UNUSED(wk), long x, long y, Mouse *mouse)
+{
+	if ((long)mouse > 7) /* Set new mouse cursor shape */
+	{
+		// cursor should be updated now, but for now I have only a single hardcoded cursor
+
+		return 0;
+	}
+	else
+	{
+
+		switch ((long)mouse)
+		{
+		case 0: /* Move visible */
+		case 4: /* Move visible forced (wk_mouse_forced) */
+			show_mouse((short)x, (short)y);
+			break;
+
+		case 1: /* Move hidden */
+		case 5: /* Move hidden forced (wk_mouse_forced) */
+			// show_mouse(vwk, (short)x, (short)y);
+			hide_mouse();
+			break;
+
+		case 2: /* Hide */
+			hide_mouse();
+			break;
+
+		case 3: /* Show */
+			show_mouse((short)x, (short)y);
+			break;
+		}
+
+		return 0;
+	}
+
+	return 0;
 }

@@ -17,8 +17,6 @@
 long CDECL c_line_draw(Virtual *vwk, long x1, long y1, long x2, long y2,
                        long pattern, long colour, long UNUSED(mode))
 {
-    return 0;
-    
     if ((long)vwk & 1) {
         return -1;                      /* Don't know about anything yet */
     }
@@ -27,7 +25,7 @@ long CDECL c_line_draw(Virtual *vwk, long x1, long y1, long x2, long y2,
         return 1;
 
     /* Only solid patterns for now. */
-    if (pattern != -1) return 0;
+    if ((pattern & 0xFFFF) != 0xFFFF) return 0;
 
     uint8_t result = 0;
     uint16_t exp_color = expanded_color[colour & 0xF];
